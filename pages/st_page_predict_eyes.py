@@ -5,19 +5,17 @@ from utils.predict import load_model, DiabetiCNN, prediction
 import pandas as pd
 import torch
 from pathlib import Path
-from dotenv import load_dotenv, find_dotenv
-from os.path import join, dirname
-import os
 
-# Find and load .env file
-_dotenv_file = find_dotenv(usecwd=True)
-if _dotenv_file:
-    load_dotenv(_dotenv_file)
-else:
-    st.warning("No .env file found. Make sure MODEL_PATH is set.")
-
+# Use Streamlit secrets instead of dotenv
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
-MODEL_PATH = Path(str(os.environ.get("MODEL_PATH") or ""))
+
+# Access secrets from .streamlit/secrets.toml
+try:
+    MODEL_PATH = Path(st.secrets["MODEL_PATH"])
+except KeyError:
+    st.error("MODEL_PATH not found in secrets.toml. Please add it to .streamlit/secrets.toml")
+    st.stop()
+
 if not MODEL_PATH.exists():
     st.error(f"Model file not found at: {MODEL_PATH}")
     st.stop()
@@ -68,3 +66,5 @@ if button_predict:
             st.metric("Good (Non-Diabetic)", f"{result['probabilities']['Good']:.2%}")
         with col2:
             st.metric("Bad (Diabetic)", f"{result['probabilities']['Bad']:.2%}")
+
+st.write("test:", st.secrets["MODEL_PATH"])
