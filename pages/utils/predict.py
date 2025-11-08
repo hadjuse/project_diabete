@@ -36,7 +36,9 @@ class DiabetiCNN(nn.Module):
     return x
 
 def load_model(model: DiabetiCNN, device, path:Path)->DiabetiCNN:
-    model.load_state_dict(torch.load(path, weights_only=True))
+    # Map to CPU if loading a model trained on GPU but running on CPU
+    map_location = torch.device('cpu') if device == 'cpu' or not torch.cuda.is_available() else device
+    model.load_state_dict(torch.load(path, weights_only=True, map_location=map_location))
     model.to(device)
     return model
 
