@@ -28,8 +28,8 @@ except KeyError:
     if env_path:
         DEFAULT_PATH = Path(env_path)
     else:
-        # Last fallback to default relative path
-        DEFAULT_PATH = PROJECT_ROOT / "pages" / "utils" / "images" / "1" / "DRIMDB"
+        # Last fallback to default relative path (use sample for cloud deployment)
+        DEFAULT_PATH = PROJECT_ROOT / "pages" / "utils" / "images" / "1" / "DRIMDB_sample"
     logger.warning(f"Using PATH_FOLDER_IMAGES from environment or fallback: {DEFAULT_PATH}")
 
 print(f"Images folder: {DEFAULT_PATH}")
