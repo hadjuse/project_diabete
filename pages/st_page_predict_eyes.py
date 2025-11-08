@@ -67,4 +67,3 @@ if button_predict:
         with col2:
             st.metric("Bad (Diabetic)", f"{result['probabilities']['Bad']:.2%}")
 
-st.write("test:", st.secrets["MODEL_PATH"])
