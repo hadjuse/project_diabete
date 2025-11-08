@@ -12,3 +12,6 @@ wheels/
 # images
 images/
 .env
+
+# streamlit
+.streamlit/

@@ -4,18 +4,22 @@ from pathlib import Path
 from typing import List, Tuple
 from PIL import Image
 import streamlit as st
-from dotenv import load_dotenv, find_dotenv
-from os.path import join, dirname
 import logging
-import os
+
 logger = logging.getLogger(__name__)
-find_dotenv(".env")
-load_dotenv()
-dotenv_path = join(dirname(__file__), '.env')
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.gif', '.bmp')
-DEFAULT_PATH = Path(str(os.environ.get("PATH_FOLDER_IMAGES")))
-print(f"Images folder:{DEFAULT_PATH}")
+
+# Get default path from Streamlit secrets
+try:
+    DEFAULT_PATH = Path(st.secrets["PATH_FOLDER_IMAGES"])
+    logger.info(f"Images folder from secrets: {DEFAULT_PATH}")
+except KeyError:
+    # Fallback to environment variable if secrets not available
+    DEFAULT_PATH = Path(os.environ.get("PATH_FOLDER_IMAGES", ""))
+    logger.warning(f"Using PATH_FOLDER_IMAGES from environment: {DEFAULT_PATH}")
+
+print(f"Images folder: {DEFAULT_PATH}")
 
 
 def load_random_images(
