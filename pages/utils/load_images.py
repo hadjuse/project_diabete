@@ -10,14 +10,27 @@ logger = logging.getLogger(__name__)
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.gif', '.bmp')
 
+# Get the project root directory
+if "pages" in str(Path(__file__).parent):
+    PROJECT_ROOT = Path(__file__).parent.parent.parent
+else:
+    PROJECT_ROOT = Path(__file__).parent
+
 # Get default path from Streamlit secrets
 try:
-    DEFAULT_PATH = Path(st.secrets["PATH_FOLDER_IMAGES"])
+    img_path_str = st.secrets["PATH_FOLDER_IMAGES"]
+    # If it's an absolute path, use it; otherwise make it relative to project root
+    DEFAULT_PATH = Path(img_path_str) if Path(img_path_str).is_absolute() else PROJECT_ROOT / img_path_str
     logger.info(f"Images folder from secrets: {DEFAULT_PATH}")
 except KeyError:
     # Fallback to environment variable if secrets not available
-    DEFAULT_PATH = Path(os.environ.get("PATH_FOLDER_IMAGES", ""))
-    logger.warning(f"Using PATH_FOLDER_IMAGES from environment: {DEFAULT_PATH}")
+    env_path = os.environ.get("PATH_FOLDER_IMAGES", "")
+    if env_path:
+        DEFAULT_PATH = Path(env_path)
+    else:
+        # Last fallback to default relative path
+        DEFAULT_PATH = PROJECT_ROOT / "pages" / "utils" / "images" / "1" / "DRIMDB"
+    logger.warning(f"Using PATH_FOLDER_IMAGES from environment or fallback: {DEFAULT_PATH}")
 
 print(f"Images folder: {DEFAULT_PATH}")
 

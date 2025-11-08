@@ -10,7 +10,10 @@ wheels/
 .venv
 
 # images
+# Ignore the full image dataset but allow sample images
 images/
+pages/utils/images/1/DRIMDB/
+!pages/utils/images/1/DRIMDB_sample/
 .env
 
 # streamlit
