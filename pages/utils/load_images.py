@@ -16,21 +16,17 @@ if "pages" in str(Path(__file__).parent):
 else:
     PROJECT_ROOT = Path(__file__).parent
 
-# Get default path from Streamlit secrets
 try:
     img_path_str = st.secrets["PATH_FOLDER_IMAGES"]
-    # If it's an absolute path, use it; otherwise make it relative to project root
     DEFAULT_PATH = Path(img_path_str) if Path(img_path_str).is_absolute() else PROJECT_ROOT / img_path_str
     logger.info(f"Images folder from secrets: {DEFAULT_PATH}")
 except KeyError:
-    # Fallback to environment variable if secrets not available
     env_path = os.environ.get("PATH_FOLDER_IMAGES", "")
     if env_path:
         DEFAULT_PATH = Path(env_path)
     else:
-        # Last fallback to default relative path (use sample for cloud deployment)
         DEFAULT_PATH = PROJECT_ROOT / "pages" / "utils" / "images" / "1" / "DRIMDB_sample"
-    logger.warning(f"Using PATH_FOLDER_IMAGES from environment or fallback: {DEFAULT_PATH}")
+
 
 print(f"Images folder: {DEFAULT_PATH}")
 

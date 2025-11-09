@@ -36,7 +36,7 @@ class DiabetiCNN(nn.Module):
     return x
 
 def load_model(model: DiabetiCNN, device, path:Path)->DiabetiCNN:
-    # Map to CPU if loading a model trained on GPU but running on CPU
+
     map_location = torch.device('cpu') if device == 'cpu' or not torch.cuda.is_available() else device
     model.load_state_dict(torch.load(path, weights_only=True, map_location=map_location))
     model.to(device)
@@ -58,11 +58,11 @@ def preprocess_image(image_file, target_size=(224, 224)):
         # It's a file-like object from Streamlit
         image_bytes = image_file.read()
         image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
-        # Reset file pointer if needed later
+
         if hasattr(image_file, 'seek'):
             image_file.seek(0)
     else:
-        # It's already a PIL Image
+        
         image = image_file.convert('RGB')
     
     # Define transforms
@@ -102,8 +102,7 @@ def prediction(model, image, device='cpu'):
     # Get probabilities and predicted class
     probabilities = output[0].cpu().numpy()
     predicted_class = probabilities.argmax()
-    
-    # Map to labels (assuming 0=Good, 1=Bad)
+
     labels = ['Good (Non-Diabetic)', 'Bad (Diabetic)']
     
     result = {
