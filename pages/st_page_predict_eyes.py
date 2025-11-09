@@ -34,7 +34,7 @@ if not MODEL_PATH.exists():
     
 model = load_model(DiabetiCNN(), device=device, path=MODEL_PATH)
 
-st.title("Predict if eyes is diabetic")
+st.title("Predict if eyes is retinopatic")
 
 
 st.header("Sample eyes images")
