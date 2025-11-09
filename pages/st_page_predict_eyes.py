@@ -25,7 +25,6 @@ try:
 except KeyError:
 
     MODEL_PATH = PROJECT_ROOT / "model" / "drimdb_model.pth"
-    st.warning(f"MODEL_PATH not in secrets, using default: {MODEL_PATH}")
 
 if not MODEL_PATH.exists():
     st.error(f"Model file not found at: {MODEL_PATH}")
