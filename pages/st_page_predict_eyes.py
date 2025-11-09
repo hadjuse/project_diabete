@@ -11,17 +11,13 @@ st.set_page_config(
     page_title="Predict_eyes" 
 )
 
-# Use Streamlit secrets - access after set_page_config
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
-# Get the project root directory (works locally and in cloud)
-# When running from pages/, go up one level
 if "pages" in str(Path(__file__).parent):
     PROJECT_ROOT = Path(__file__).parent.parent
 else:
     PROJECT_ROOT = Path(__file__).parent
 
-# Access secrets from .streamlit/secrets.toml or use relative paths
 try:
     model_path_str = st.secrets["MODEL_PATH"]
 
@@ -41,13 +37,7 @@ model = load_model(DiabetiCNN(), device=device, path=MODEL_PATH)
 
 st.title("Predict if eyes is diabetic")
 
-# button_stream = st.button(label="Stream_test")
 
-# text = """
-# Je choisi de créer un monde rempli de vice
-# """
-# if button_stream:
-#     st.write_stream(stream_data(text))
 st.header("Sample eyes images")
 
 images = load_random_images()
@@ -62,7 +52,6 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file:
-    # Check file size (Streamlit Cloud has limits)
     file_size_mb = uploaded_file.size / (1024 * 1024)
     if file_size_mb > 10:
         st.error(f"File too large: {file_size_mb:.1f}MB. Please upload an image smaller than 10MB.")
